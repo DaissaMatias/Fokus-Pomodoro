@@ -76,26 +76,28 @@ function alterarContexto(contexto) {
 }
 
 const contagemRegressiva = () => {
-    if(tempoDecorridoEmSegundos <= 0) 
+    if (tempoDecorridoEmSegundos <= 0) {
         zerar()
         const focoAtivo = html.getAttribute('data-contexto') === 'foco'
-        if (focoAtivo) {
+        if (focoAtivo) {            
             var event = new CustomEvent("TarefaFinalizada", {
                 detail: {
                     message: "A tarefa foi concluída com sucesso!",
-                    time:new Date(),
+                    time: new Date(),
                 },
                 bubbles: true,
                 cancelable: true
             });
             document.dispatchEvent(event);
-            tempoDecorridoEmSegundos = 5;
-            mostrarTempo();
+            tempoDecorridoEmSegundos = 5
+            mostrarTempo()
         }
+
         return
     }
     tempoDecorridoEmSegundos -= 1
     mostrarTempo()
+}
 
 startPauseBt.addEventListener('click', iniciarOuPausar)
 
