@@ -36,6 +36,16 @@ let itemTarefaSelecionada = null;
 let tarefaEmEdicao = null;
 let paragraphEmEdicao = null;
 
+const removerTarefas = (somenteConcluidas) => {
+    const seletor = somenteConcluidas ? '.app__section-task-list-item-complete' : '.app__section-task-list-item';
+    document.querySelectorAll(seletor).forEach((element) => {
+        element.remove();
+    });
+
+    tarefas = somenteConcluidas ? tarefas.filter(t => !t.concluida) : [];
+    updateLocalStorage();
+}
+
 const selecionaTarefa = (tarefa, elemento) => {
     if(tarefa.concluida) {
         return
@@ -141,6 +151,11 @@ cancelFormTaskBtn.addEventListener("click", () => {
 
 btnCancelar.addEventListener("click", limparForm )
 
+toggleFormTaskBtn.addEventListener('click', () =>{
+    formLabel.textContent = 'Adicionando Tarefa';
+    formTask.classList.toggle('hidden');
+})
+
 btnDeletar.addEventListener("click", () => {
     if (tarefaSelecionada) {
         const index = tarefas.indexOf(tarefaSelecionada)
@@ -156,11 +171,6 @@ btnDeletar.addEventListener("click", () => {
     }
     updateLocalStorage();
     limparForm();
-})
-
-toggleFormTaskBtn.addEventListener('click', () =>{
-    formLabel.textContent = 'Adicionando Tarefa';
-    formTask.classList.toggle('hidden');
 })
 
 const updateLocalStorage = () => {
@@ -186,6 +196,9 @@ formTask.addEventListener('submit', (evento) => {
     limparForm();
 })
 
+btnDeletarConcluidas.addEventListener("click", () => removerTarefas(true));
+btnDeletarTodas.addEventListener("click", () => removerTarefas(false));
+
 document.addEventListener('TarefaFinalizada', function (e) {
     if(tarefaSelecionada) {
         tarefaSelecionada.concluida = true;
@@ -194,17 +207,3 @@ document.addEventListener('TarefaFinalizada', function (e) {
         updateLocalStorage();
     }
 })
-
-const removerTarefas = (somenteConcluidas) => {
-    const seletor = somenteConcluidas ? '.app__section-task-list-item-complete' : '.app__section-task-list-item';
-    document.querySelectorAll(seletor).forEach((element) => {
-        element.remove();
-    });
-
-    tarefas = somenteConcluidas ? tarefas.filter(t => !t.concluida) : [];
-    updateLocalStorage();
-}
-
-btnDeletarConcluidas.addEventListener("click", () => removerTarefas(true));
-btnDeletarTodas.addEventListener("click", () => removerTarefas(false));
-
